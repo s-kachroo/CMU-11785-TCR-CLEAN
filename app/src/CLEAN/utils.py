@@ -65,7 +65,7 @@ def load_esm(lookup, dir_name):
     return esm.unsqueeze(0)
 
 
-def esm_embedding(ec_id_dict, device, type, dir_name):
+def esm_embedding(ec_id_dict, device, dtype, dir_name):
     '''
     Loading esm embedding in the sequence of EC numbers
     prepare for calculating cluster center by EC
