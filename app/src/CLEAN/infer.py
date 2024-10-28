@@ -44,7 +44,7 @@ def infer_pvalue(train_data, test_data, p_value = 1e-5, nk_random = 20,
     else:
         emb_train = model(esm_embedding(ec_id_dict_train, device, dtype, dir_name))
         
-    emb_test = model_embedding_test(id_ec_test, model, device, dtype)
+    emb_test = model_embedding_test(id_ec_test, model, device, dtype, dir_name)
     eval_dist = get_dist_map_test(emb_train, emb_test, ec_id_dict_train, id_ec_test, device, dtype)
     seed_everything()
     eval_df = pd.DataFrame.from_dict(eval_dist)
@@ -106,7 +106,7 @@ def infer_maxsep(train_data, test_data, report_metrics = False,
     else:
         emb_train = model(esm_embedding(ec_id_dict_train, device, dtype, dir_name))
         
-    emb_test = model_embedding_test(id_ec_test, model, device, dtype)
+    emb_test = model_embedding_test(id_ec_test, model, device, dtype, dir_name)
     eval_dist = get_dist_map_test(emb_train, emb_test, ec_id_dict_train, id_ec_test, device, dtype)
     seed_everything()
     eval_df = pd.DataFrame.from_dict(eval_dist)
