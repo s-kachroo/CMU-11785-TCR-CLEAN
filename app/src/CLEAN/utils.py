@@ -79,14 +79,14 @@ def esm_embedding(ec_id_dict, device, dtype, dir_name):
     return torch.cat(esm_emb).to(device=device, dtype=dtype)
 
 
-def model_embedding_test(id_ec_test, model, device, dtype):
+def model_embedding_test(id_ec_test, model, device, dtype, dir_name):
     '''
     Instead of loading esm embedding in the sequence of EC numbers
     the test embedding is loaded in the sequence of queries
     then inferenced with model to get model embedding
     '''
     ids_for_query = list(id_ec_test.keys())
-    esm_to_cat = [load_esm(id) for id in ids_for_query]
+    esm_to_cat = [load_esm(id, dir_name) for id in ids_for_query]
     esm_emb = torch.cat(esm_to_cat).to(device=device, dtype=dtype)
     model_emb = model(esm_emb)
     return model_emb
