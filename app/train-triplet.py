@@ -130,8 +130,8 @@ def main():
               f'training loss {train_loss:6.4f}')
         print('-' * 75)
     # remove tmp save weights
-    os.remove('./data/model/' + model_name + '.pth')
-    os.remove('./data/model/' + model_name + '_' + str(epoch) + '.pth')
+    # os.remove('./data/model/' + model_name + '.pth')
+    # os.remove('./data/model/' + model_name + '_' + str(epoch) + '.pth')
     # save final weights
     torch.save(model.state_dict(), './data/model/' + model_name + '.pth')
 
