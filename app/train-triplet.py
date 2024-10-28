@@ -18,6 +18,7 @@ def parse():
     parser.add_argument('-t', '--training_data', type=str, default='split10')
     parser.add_argument('-d', '--hidden_dim', type=int, default=512)
     parser.add_argument('-o', '--out_dim', type=int, default=128)
+    parser.add_argument('-dir', '--dir_name', type=str, default='esm2_t33_650M')
     parser.add_argument('--adaptive_rate', type=int, default=100)
     parser.add_argument('--verbose', type=bool, default=False)
     args = parser.parse_args()
@@ -30,7 +31,8 @@ def get_dataloader(dist_map, id_ec, ec_id, args):
         'shuffle': True,
     }
     negative = mine_hard_negative(dist_map, 30)
-    train_data = Triplet_dataset_with_mine_EC(id_ec, ec_id, negative)
+    dir_name = args.dir_name
+    train_data = Triplet_dataset_with_mine_EC(id_ec, ec_id, negative, dir_name)
     train_loader = torch.utils.data.DataLoader(train_data, **params)
     return train_loader
 
