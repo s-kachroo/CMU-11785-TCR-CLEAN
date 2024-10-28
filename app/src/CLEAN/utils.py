@@ -105,6 +105,7 @@ def csv_to_fasta(csv_name, fasta_name):
     csvfile = open(csv_name, 'r')
     csvreader = csv.reader(csvfile, delimiter=',')
     outfile = open(fasta_name, 'w')
+    print(rows)
     for i, rows in enumerate(csvreader):
         if i > 0:
             outfile.write('>' + rows[0] + '\n')
