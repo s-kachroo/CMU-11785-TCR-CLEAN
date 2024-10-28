@@ -51,7 +51,7 @@ def random_positive(id, id_ec, ec_id):
     return pos
 
 
-class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset):
+class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset, dir_name='esm2_t33_650M_1028'):
 
     def __init__(self, id_ec, ec_id, mine_neg):
         self.id_ec = id_ec
@@ -70,9 +70,9 @@ class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset):
         anchor = random.choice(self.ec_id[anchor_ec])
         pos = random_positive(anchor, self.id_ec, self.ec_id)
         neg = mine_negative(anchor, self.id_ec, self.ec_id, self.mine_neg)
-        a = torch.load('./data/esm_data/' + anchor + '.pt')
-        p = torch.load('./data/esm_data/' + pos + '.pt')
-        n = torch.load('./data/esm_data/' + neg + '.pt')
+        a = torch.load('./data/' + dir_name + '/' + anchor + '.pt')
+        p = torch.load('./data/' + dir_name + '/' + pos + '.pt')
+        n = torch.load('./data/' + dir_name + '/' + neg + '.pt')
         return format_esm(a), format_esm(p), format_esm(n)
 
 
