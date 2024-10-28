@@ -103,7 +103,7 @@ def model_embedding_test_ensemble(id_ec_test, device, dtype):
 
 def csv_to_fasta(csv_name, fasta_name):
     csvfile = open(csv_name, 'r')
-    csvreader = csv.reader(csvfile, delimiter='\t')
+    csvreader = csv.reader(csvfile, delimiter=',')
     outfile = open(fasta_name, 'w')
     for i, rows in enumerate(csvreader):
         if i > 0:
