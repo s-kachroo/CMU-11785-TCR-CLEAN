@@ -11,7 +11,7 @@ def warn(*args, **kwargs):
 warnings.warn = warn
 
 def infer_pvalue(train_data, test_data, p_value = 1e-5, nk_random = 20, 
-                 report_metrics = False, pretrained=True, model_name=None):
+                 report_metrics = False, pretrained=True, model_name=None, dir_name='esm2_t33_650M'):
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:0" if use_cuda else "cpu")
     dtype = torch.float32
@@ -42,7 +42,7 @@ def infer_pvalue(train_data, test_data, p_value = 1e-5, nk_random = 20,
     elif train_data == "split100":
         emb_train = torch.load('./data/pretrained/100.pt', map_location=device)
     else:
-        emb_train = model(esm_embedding(ec_id_dict_train, device, dtype))
+        emb_train = model(esm_embedding(ec_id_dict_train, device, dtype, dir_name))
         
     emb_test = model_embedding_test(id_ec_test, model, device, dtype)
     eval_dist = get_dist_map_test(emb_train, emb_test, ec_id_dict_train, id_ec_test, device, dtype)
@@ -73,7 +73,7 @@ def infer_pvalue(train_data, test_data, p_value = 1e-5, nk_random = 20,
 
 
 def infer_maxsep(train_data, test_data, report_metrics = False, 
-                 pretrained=True, model_name=None, gmm = None):
+                 pretrained=True, model_name=None, gmm = None, dir_name='esm2_t33_650M'):
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:0" if use_cuda else "cpu")
     dtype = torch.float32
@@ -104,7 +104,7 @@ def infer_maxsep(train_data, test_data, report_metrics = False,
     elif train_data == "split100":
         emb_train = torch.load('./data/pretrained/100.pt', map_location=device)
     else:
-        emb_train = model(esm_embedding(ec_id_dict_train, device, dtype))
+        emb_train = model(esm_embedding(ec_id_dict_train, device, dtype, dir_name))
         
     emb_test = model_embedding_test(id_ec_test, model, device, dtype)
     eval_dist = get_dist_map_test(emb_train, emb_test, ec_id_dict_train, id_ec_test, device, dtype)
