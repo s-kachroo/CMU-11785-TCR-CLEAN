@@ -60,12 +60,12 @@ def format_esm(a):
     return a
 
 
-def load_esm(lookup):
-    esm = format_esm(torch.load('./data/esm_data/' + lookup + '.pt'))
+def load_esm(lookup, dir_name):
+    esm = format_esm(torch.load('./data/' + dir_name + '/' + lookup + '.pt'))
     return esm.unsqueeze(0)
 
 
-def esm_embedding(ec_id_dict, device, dtype):
+def esm_embedding(ec_id_dict, device, type, dir_name):
     '''
     Loading esm embedding in the sequence of EC numbers
     prepare for calculating cluster center by EC
@@ -74,7 +74,7 @@ def esm_embedding(ec_id_dict, device, dtype):
     # for ec in tqdm(list(ec_id_dict.keys())):
     for ec in list(ec_id_dict.keys()):
         ids_for_query = list(ec_id_dict[ec])
-        esm_to_cat = [load_esm(id) for id in ids_for_query]
+        esm_to_cat = [load_esm(id, dir_name) for id in ids_for_query]
         esm_emb = esm_emb + esm_to_cat
     return torch.cat(esm_emb).to(device=device, dtype=dtype)
 
@@ -124,13 +124,13 @@ def retrive_esm1b_embedding(fasta_name):
               fasta_name, esm_out, "--include", "mean"]
     subprocess.run(command)
  
-def compute_esm_distance(train_file):
+def compute_esm_distance(train_file, dir_name):
     ensure_dirs('./data/distance_map/')
     _, ec_id_dict = get_ec_id_dict('./data/' + train_file + '.csv')
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:0" if use_cuda else "cpu")
     dtype = torch.float32
-    esm_emb = esm_embedding(ec_id_dict, device, dtype)
+    esm_emb = esm_embedding(ec_id_dict, device, dtype, dir_name)
     esm_dist = get_dist_map(ec_id_dict, esm_emb, device, dtype)
     pickle.dump(esm_dist, open('./data/distance_map/' + train_file + '.pkl', 'wb'))
     pickle.dump(esm_emb, open('./data/distance_map/' + train_file + '_esm.pkl', 'wb'))
