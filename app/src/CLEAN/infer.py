@@ -11,7 +11,7 @@ def warn(*args, **kwargs):
 warnings.warn = warn
 
 def infer_pvalue(train_data, test_data, p_value = 1e-5, nk_random = 20, 
-                 report_metrics = False, pretrained=True, model_name=None, dir_name='esm2_t33_650M'):
+                 report_metrics = False, pretrained=True, model_name=None, dir_name='esm2_t33_650M_1028_v1'):
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:0" if use_cuda else "cpu")
     dtype = torch.float32
@@ -73,7 +73,7 @@ def infer_pvalue(train_data, test_data, p_value = 1e-5, nk_random = 20,
 
 
 def infer_maxsep(train_data, test_data, report_metrics = False, 
-                 pretrained=True, model_name=None, gmm = None, dir_name='esm2_t33_650M'):
+                 pretrained=True, model_name=None, gmm = None, dir_name='esm2_t33_650M_1028_v1'):
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:0" if use_cuda else "cpu")
     dtype = torch.float32
