@@ -70,9 +70,9 @@ class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset, dir_name='esm2_t33_
         anchor = random.choice(self.ec_id[anchor_ec])
         pos = random_positive(anchor, self.id_ec, self.ec_id)
         neg = mine_negative(anchor, self.id_ec, self.ec_id, self.mine_neg)
-        a = torch.load('./data/' + dir_name + '/' + anchor + '.pt')
-        p = torch.load('./data/' + dir_name + '/' + pos + '.pt')
-        n = torch.load('./data/' + dir_name + '/' + neg + '.pt')
+        a = torch.load('./data/' + 'esm2_t33_650M_1028' + '/' + anchor + '.pt')
+        p = torch.load('./data/' + 'esm2_t33_650M_1028' + '/' + pos + '.pt')
+        n = torch.load('./data/' + 'esm2_t33_650M_1028' + '/' + neg + '.pt')
         return format_esm(a), format_esm(p), format_esm(n)
 
 
