@@ -20,13 +20,13 @@ def seed_everything(seed=1234):
 
 def get_ec_id_dict(csv_name: str) -> dict:
     csv_file = open(csv_name)
-    csvreader = csv.reader(csv_file, delimiter='\t')
+    csvreader = csv.reader(csv_file, delimiter=',')
     id_ec = {}
     ec_id = {}
 
     for i, rows in enumerate(csvreader):
         if i > 0:
-            id_ec[rows[0]] = rows[1].split(',')
+            id_ec[rows[0]] = rows[1].split(';')
             for ec in rows[1].split(';'):
                 if ec not in ec_id.keys():
                     ec_id[ec] = set()
@@ -37,7 +37,7 @@ def get_ec_id_dict(csv_name: str) -> dict:
 
 def get_ec_id_dict_non_prom(csv_name: str) -> dict:
     csv_file = open(csv_name)
-    csvreader = csv.reader(csv_file, delimiter='\t')
+    csvreader = csv.reader(csv_file, delimiter=',')
     id_ec = {}
     ec_id = {}
 
@@ -138,7 +138,7 @@ def compute_esm_distance(train_file):
 def prepare_infer_fasta(fasta_name):
     retrive_esm1b_embedding(fasta_name)
     csvfile = open('./data/' + fasta_name +'.csv', 'w', newline='')
-    csvwriter = csv.writer(csvfile, delimiter = '\t')
+    csvwriter = csv.writer(csvfile, delimiter = ',')
     csvwriter.writerow(['Entry', 'EC number', 'Sequence'])
     fastafile = open('./data/' + fasta_name +'.fasta', 'r')
     for i in fastafile.readlines():
