@@ -27,7 +27,7 @@ def parse():
 
 def get_dataloader(dist_map, id_ec, ec_id, args):
     params = {
-        'batch_size': 256,
+        'batch_size': 6000,
         'shuffle': True,
     }
     negative = mine_hard_negative(dist_map, 30)
