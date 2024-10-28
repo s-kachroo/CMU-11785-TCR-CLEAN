@@ -26,7 +26,7 @@ def get_ec_id_dict(csv_name: str) -> dict:
 
     for i, rows in enumerate(csvreader):
         if i > 0:
-            id_ec[rows[0]] = rows[1].split(';')
+            id_ec[rows[0]] = rows[1].split(',')
             for ec in rows[1].split(';'):
                 if ec not in ec_id.keys():
                     ec_id[ec] = set()
