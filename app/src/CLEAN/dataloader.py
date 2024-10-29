@@ -53,15 +53,23 @@ def random_positive(id, id_ec, ec_id):
 
 class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset):
 
-    def __init__(self, id_ec, ec_id, mine_neg, dir_name='cmu_idl_dir_name'):
+    def __init__(self, id_ec, ec_id, mine_neg, dir_name='cmu_idl_dir_name', batch_size=256):
         self.id_ec = id_ec
         self.ec_id = ec_id
         self.full_list = []
         self.mine_neg = mine_neg
         self.dir_name = dir_name
-        for ec in ec_id.keys():
-            if '-' not in ec:
-                self.full_list.append(ec)
+        # for ec in ec_id.keys():
+        #     if '-' not in ec:
+        #         self.full_list.append(ec)
+        for _ in range(self.batch_size):
+            # Randomly select an id from id_ec keys
+            random_id = random.choice(list(self.id_ec.keys()))
+            # Randomly select an ec from the list associated with this id
+            if isinstance(self.id_ec[random_id], list):
+                random_ec = random.choice(self.id_ec[random_id])
+                self.full_list.append(random_ec)
+        
 
     def __len__(self):
         return len(self.full_list)
