@@ -193,7 +193,7 @@ def update_dist_dict_blast(emb_test, emb_train, dist, start, end,
 
 def get_true_labels(file_name):
     result = open(file_name+'.csv', 'r')
-    csvreader = csv.reader(result, delimiter='\t')
+    csvreader = csv.reader(result, delimiter=',')
     all_label = set()
     true_label_dict = {}
     header = True
