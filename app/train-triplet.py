@@ -18,7 +18,8 @@ def parse():
     parser.add_argument('-t', '--training_data', type=str, default='split10')
     parser.add_argument('-d', '--hidden_dim', type=int, default=512)
     parser.add_argument('-o', '--out_dim', type=int, default=128)
-    parser.add_argument('-dir', '--dir_name', type=str, default='esm2_t33_650M')
+    parser.add_argument('-dir', '--dir_name', type=str, default='cmu_idl_dir_name')
+    parser.add_argument('-batch', '--batch_size', type=int, default=6000)
     parser.add_argument('--adaptive_rate', type=int, default=100)
     parser.add_argument('--verbose', type=bool, default=False)
     args = parser.parse_args()
@@ -26,8 +27,9 @@ def parse():
 
 
 def get_dataloader(dist_map, id_ec, ec_id, args):
+    batch = args.batch_size
     params = {
-        'batch_size': 6000,
+        'batch_size': batch,
         'shuffle': True,
     }
     negative = mine_hard_negative(dist_map, 30)

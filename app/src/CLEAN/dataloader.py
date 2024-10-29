@@ -53,7 +53,7 @@ def random_positive(id, id_ec, ec_id):
 
 class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset):
 
-    def __init__(self, id_ec, ec_id, mine_neg, dir_name='esm2_t33_650M_1028'):
+    def __init__(self, id_ec, ec_id, mine_neg, dir_name='cmu_idl_dir_name'):
         self.id_ec = id_ec
         self.ec_id = ec_id
         self.full_list = []
