@@ -62,7 +62,7 @@ class Triplet_dataset_with_mine_EC(torch.utils.data.Dataset):
         # for ec in ec_id.keys():
         #     if '-' not in ec:
         #         self.full_list.append(ec)
-        for _ in range(self.batch_size):
+        for _ in range(batch_size):
             # Randomly select an id from id_ec keys
             random_id = random.choice(list(self.id_ec.keys()))
             # Randomly select an ec from the list associated with this id
