@@ -19,6 +19,7 @@ def parse():
     parser.add_argument('-d', '--hidden_dim', type=int, default=512)
     parser.add_argument('-o', '--out_dim', type=int, default=128)
     parser.add_argument('-dir', '--dir_name', type=str, default='cmu_idl_dir_name')
+    parser.add_argument('-fl', '--new_full_list', type=bool, default=True)
     parser.add_argument('-batch', '--batch_size', type=int, default=6000)
     parser.add_argument('--adaptive_rate', type=int, default=100)
     parser.add_argument('--verbose', type=bool, default=False)
@@ -34,13 +35,15 @@ def get_dataloader(dist_map, id_ec, ec_id, args):
     }
     negative = mine_hard_negative(dist_map, 30)
     dir_name = args.dir_name
-    train_data = Triplet_dataset_with_mine_EC(id_ec, ec_id, negative, dir_name)
+    use_new_full_method = args.new_full_list 
+    list_batch_size = 256
+    train_data = Triplet_dataset_with_mine_EC(id_ec, ec_id, negative, dir_name, list_batch_size, use_new_full_method)
     train_loader = torch.utils.data.DataLoader(train_data, **params)
     return train_loader
 
 
 def train(model, args, epoch, train_loader,
-          optimizer, device, dtype, criterion):
+          optimizer, device, dtype, criterion, log_file):
     model.train()
     total_loss = 0.
     start_time = time.time()
@@ -66,6 +69,12 @@ def train(model, args, epoch, train_loader,
                   f'loss {cur_loss:5.2f}')
             start_time = time.time()
     # record running average training loss
+    avg_loss = total_loss / (batch + 1)
+
+    # Log the loss to the file
+    with open(log_file, 'a') as f:
+        f.write(f'Epoch {epoch}: Training Loss = {avg_loss:6.4f}\n')
+
     return total_loss/(batch + 1)
 
 
@@ -76,6 +85,14 @@ def main():
     torch.backends.cudnn.benchmark = True
     id_ec, ec_id_dict = get_ec_id_dict('./data/' + args.training_data + '.csv')
     ec_id = {key: list(ec_id_dict[key]) for key in ec_id_dict.keys()}
+
+    # Initialize the log file
+    log_file = './data/model/' + args.model_name + '_training_log.txt'
+    # Ensure the file is empty before starting
+    with open(log_file, 'w') as f:
+        f.write(f'Training Log for model: {args.model_name}\n')
+        f.write('-' * 75 + '\n')
+
     #======================== override args ====================#
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:0" if use_cuda else "cpu")
@@ -119,7 +136,7 @@ def main():
         # -------------------------------------------------------------------- #
         epoch_start_time = time.time()
         train_loss = train(model, args, epoch, train_loader,
-                           optimizer, device, dtype, criterion)
+                           optimizer, device, dtype, criterion, log_file)
         # only save the current best model near the end of training
         if (train_loss < best_loss and epoch > 0.8*epochs):
             torch.save(model.state_dict(), './data/model/' + model_name + '.pth')
